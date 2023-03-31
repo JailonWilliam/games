@@ -43,7 +43,7 @@ segmentos_cobra = []
 comprimento_inicial = 5
 
 # Gerar a maçã em uma posição aleatória
-posicao_maca = [random.randrange(0, largura_tela / 10) * 10, random.randrange(0, altura_tela / 10) * 10]
+posicao_maca = [random.randrange(0, (largura_tela // 10)) * 10, random.randrange(0, altura_tela // 10) * 10]
 
 # Definir a pontuação
 pontuacao = 0
@@ -96,8 +96,9 @@ def texto_morte():
     texto = fonte_morte.render(f'Pressione "R" para recomeçar', True, VERMELHO)
     tela.blit(texto, [120, 250])
 
+
 def morreu():
-    global jogo_ativo, segmentos_cobra, pontuacao, obstaculo
+    global jogo_ativo, segmentos_cobra, pontuacao, obstaculo, velocidade_jogo, record
     recomecar = False
     while recomecar == False:
         for evento in pygame.event.get():
@@ -112,12 +113,20 @@ def morreu():
     
     #redefinindo cobra
     segmentos_cobra = []
-    
+
+    #atualizando record
+    if pontuacao > record:
+        record = pontuacao
+        atualiza_record()
     #redefinindo pontuação
     pontuacao = 0
 
     #redefinindo obstaculo
     obstaculo = []
+
+    #redefinindo velocidade
+    velocidade_jogo = 15
+
 
 def desenhar_jogo():
     desenhar_obstaculo()
@@ -194,7 +203,9 @@ def jogo():
         # Verificar se a cobra comeu a maçã
         if posicao_x == posicao_maca[0] and posicao_y == posicao_maca[1]:
             aux = posicao_maca
-            posicao_maca = [random.randrange(0, largura_tela / 10) * 10, random.randrange(0, altura_tela / 10) * 10]
+
+            posicao_maca = [random.randrange(0, largura_tela // 10) * 10, random.randrange(0, altura_tela // 10) * 10]
+
             obstaculo.append(aux)
             pontuacao += 1
             segmentos_cobra.append([posicao_x, posicao_y])
